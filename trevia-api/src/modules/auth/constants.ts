@@ -1,9 +1,10 @@
+import configuration from '@/configuration';
 import { JwtModuleOptions } from '@nestjs/jwt';
+
+const { jwtSecret } = configuration();
 
 export const JWT_CONSTANTS: JwtModuleOptions = {
   global: true,
+  secret: jwtSecret,
   signOptions: { expiresIn: '60m' },
-  // TODO: parametrize via env variables
-  secret:
-    'DO NOT USE THIS VALUE. INSTEAD, CREATE A COMPLEX SECRET AND KEEP IT SAFE OUTSIDE OF THE SOURCE CODE.',
 };

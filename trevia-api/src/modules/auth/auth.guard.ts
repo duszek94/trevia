@@ -20,8 +20,6 @@ export class AuthGuard {
       context.getClass(),
     ]);
 
-    console.log('Is Public:', isPublic);
-
     if (isPublic) {
       return true;
     }

@@ -1,3 +1,4 @@
+import { JwtResponse, SignInDto } from '@models';
 import {
   Body,
   Controller,
@@ -8,8 +9,6 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { JwtResponse } from 'src/interfaces/jwt-response.interface';
-import type { SignIn } from 'src/interfaces/sign-in.interface';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { Public } from './is-public.decorator';
@@ -21,9 +20,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Public()
   @Post('login')
-  public signIn(@Body() signInDto: SignIn): Promise<JwtResponse> {
-    console.log('SignIn DTO:', signInDto);
-
+  public signIn(@Body() signInDto: SignInDto): Promise<JwtResponse> {
     return this.authService.signIn(signInDto.name, signInDto.password);
   }
 

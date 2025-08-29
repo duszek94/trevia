@@ -1,13 +1,14 @@
+import { User } from '@database/entities/user.entity';
+import { UsersService } from '@modules/users/users.service';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/database/entities/user.entity';
-import { UsersService } from '../users/users.service';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { JWT_CONSTANTS } from './constants';
+import { CryptoService } from './crypto.service';
 
 @Module({
   controllers: [AuthController],
@@ -18,6 +19,7 @@ import { JWT_CONSTANTS } from './constants';
   providers: [
     AuthService,
     UsersService,
+    CryptoService,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
