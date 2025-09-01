@@ -2,6 +2,7 @@ import { JwtResponse } from '@models';
 import { UsersService } from '@modules/users/users.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import express from 'express';
 import { CryptoService } from './crypto.service';
 
 @Injectable()
@@ -12,7 +13,11 @@ export class AuthService {
     private readonly cryptoService: CryptoService,
   ) {}
 
-  public async signIn(name: string, password: string): Promise<JwtResponse> {
+  public async signIn(
+    name: string,
+    password: string,
+    response: express.Response,
+  ): Promise<JwtResponse> {
     const user = await this.usersService.findOne(name);
 
     if (!user) {
@@ -29,9 +34,15 @@ export class AuthService {
     }
 
     const payload = { sub: user.id, name: user.name };
+    const accessToken = await this.jwtService.signAsync(payload);
+
+    response.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: true,
+    });
 
     return {
-      accessToken: await this.jwtService.signAsync(payload),
+      accessToken,
     };
   }
 }

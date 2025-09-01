@@ -25,7 +25,7 @@ export class AuthGuard {
     }
 
     const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+    const token = request.cookies?.['accessToken'];
 
     if (!token) {
       throw new UnauthorizedException();
@@ -40,10 +40,5 @@ export class AuthGuard {
     } catch {
       throw new UnauthorizedException();
     }
-  }
-
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers['authorization']?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
   }
 }

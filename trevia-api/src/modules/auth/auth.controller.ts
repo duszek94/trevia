@@ -7,11 +7,13 @@ import {
   HttpStatus,
   Post,
   Request,
+  Response,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { Public } from './is-public.decorator';
+import express from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -20,8 +22,11 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Public()
   @Post('login')
-  public signIn(@Body() signInDto: SignInDto): Promise<JwtResponse> {
-    return this.authService.signIn(signInDto.name, signInDto.password);
+  public signIn(
+    @Body() signInDto: SignInDto,
+    @Response({ passthrough: true }) response: express.Response,
+  ): Promise<JwtResponse> {
+    return this.authService.signIn(signInDto.name, signInDto.password, response);
   }
 
   @UseGuards(AuthGuard)
